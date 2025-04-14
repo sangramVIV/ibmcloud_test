@@ -22,17 +22,17 @@ jobs:
         env:
           IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
         run: |
-          ibmcloud login --apikey $IBM_CLOUD_API_KEY -r us-south
-          ibmcloud cr region-set us-south
+          ibmcloud login --apikey $IBM_CLOUD_API_KEY -r icr.io
+          ibmcloud cr region-set icr.io
 
       - name: Docker Login to IBM Container Registry
         run: |
-          docker login -u iamapikey -p ${{ secrets.IBM_CLOUD_API_KEY }} us.icr.io
+          docker login -u iamapikey -p ${{ secrets.IBM_CLOUD_API_KEY }} icr.io
 
       - name: Build Docker Image
         run: |
-          docker build -t us.icr.io/dockerimage/myapp:latest .
+          docker build -t icr.io/dockerimage/myapp:latest .
 
       - name: Push Docker Image to IBM Cloud
         run: |
-          docker push us.icr.io/dockerimage/myapp:latest
+          docker push icr.io/dockerimage/myapp:latest
