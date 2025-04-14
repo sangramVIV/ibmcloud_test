@@ -22,8 +22,8 @@ jobs:
         env:
           IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
         run: |
-          ibmcloud login --apikey $IBM_CLOUD_API_KEY -r icr.io
-          ibmcloud cr region-set icr.io
+          ibmcloud login --apikey $IBM_CLOUD_API_KEY -r eu-de
+          ibmcloud cr region-set eu-de
 
       - name: Docker Login to IBM Container Registry
         run: |
