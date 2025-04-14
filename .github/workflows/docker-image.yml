@@ -1,18 +1,38 @@
-name: Docker Image CI
+name: Build and Push to IBM Cloud Container Registry
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
-
-  build:
-
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up IBM Cloud CLI
+        run: |
+          curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
+          ibmcloud plugin install container-registry -f
+
+      - name: Login to IBM Cloud
+        env:
+          IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
+        run: |
+          ibmcloud login --apikey $IBM_CLOUD_API_KEY -r us-south
+          ibmcloud cr region-set us-south
+
+      - name: Docker Login to IBM Container Registry
+        run: |
+          docker login -u iamapikey -p ${{ secrets.IBM_CLOUD_API_KEY }} us.icr.io
+
+      - name: Build Docker Image
+        run: |
+          docker build -t us.icr.io/your-namespace/your-image-name:latest .
+
+      - name: Push Docker Image to IBM Cloud
+        run: |
+          docker push us.icr.io/your-namespace/your-image-name:latest
