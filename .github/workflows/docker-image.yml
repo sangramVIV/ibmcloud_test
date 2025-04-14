@@ -31,8 +31,8 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t us.icr.io/your-namespace/your-image-name:latest .
+          docker build -t us.icr.io/dockerimage/myapp:latest .
 
       - name: Push Docker Image to IBM Cloud
         run: |
-          docker push us.icr.io/your-namespace/your-image-name:latest
+          docker push us.icr.io/dockerimage/myapp:latest
